@@ -16,7 +16,7 @@ const HomePage = ({ user, setUser }) => {
 
   const genres = [
     { name: 'HipHop', image: '../images/hiphop.png' },
-    { name: 'Rock', image: '/images/rock.jpg' },
+    { name: 'Rock', image: '../images/rock.jpg' },
     { name: 'Lofi', image: '/images/lofi.jpg' },
     { name: 'Jazz', image: '/images/jazz.jpg' },
     { name: 'Classical', image: '/images/classical.jpg' },
