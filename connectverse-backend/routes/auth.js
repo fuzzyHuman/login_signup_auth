@@ -17,9 +17,13 @@ router.post('/signup', async (req, res) => {
 
     user = new User({ username, email, password });
 
+    // Hash the password before saving
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
     await user.save();
 
-    const payload = { user: { id: user.id } };
+    const payload = { user: { id: user.id, username: user.username } };
 
     jwt.sign(
       payload,
@@ -27,7 +31,7 @@ router.post('/signup', async (req, res) => {
       { expiresIn: '5h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token, username: user.username });
       }
     );
   } catch (err) {
@@ -52,7 +56,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ msg: 'Invalid Credentials' });
     }
 
-    const payload = { user: { id: user.id } };
+    const payload = { user: { id: user.id, username: user.username } };
 
     jwt.sign(
       payload,
@@ -60,7 +64,7 @@ router.post('/login', async (req, res) => {
       { expiresIn: '5h' },
       (err, token) => {
         if (err) throw err;
-        res.json({ token });
+        res.json({ token, username: user.username });
       }
     );
   } catch (err) {

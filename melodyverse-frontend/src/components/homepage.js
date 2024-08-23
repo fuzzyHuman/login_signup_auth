@@ -1,8 +1,17 @@
 import React from 'react';
 import { Button } from '@nextui-org/react';
+import { Link, useNavigate } from 'react-router-dom';
 import GenreCard from './GenreCard';
 
-const HomePage = ({ username }) => {
+const HomePage = ({ user, setUser }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    navigate('/');
+  };
+
   const genres = [
     { name: 'HipHop', image: '/images/hiphop.jpg' },
     { name: 'Rock', image: '/images/rock.jpg' },
@@ -13,7 +22,8 @@ const HomePage = ({ username }) => {
   ];
 
   return (
-    <div style={{ display: 'flex', height: '100vh', flexDirection: 'row' }}>
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+      {/* Sidebar */}
       <div
         style={{
           width: '250px',
@@ -23,6 +33,9 @@ const HomePage = ({ username }) => {
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '1rem',
+          position: 'fixed',
+          top: 0,
+          bottom: 0,
         }}
       >
         <div>
@@ -50,38 +63,71 @@ const HomePage = ({ username }) => {
               Settings
             </Button>
           </div>
-          <Button flat auto style={{ width: '100%', justifyContent: 'flex-start' }}>
-            Sign In
-          </Button>
+          {user ? (
+            <Button flat auto style={{ width: '100%', justifyContent: 'flex-start' }} onClick={handleLogout}>
+              Sign Out
+            </Button>
+          ) : (
+            <Link to="/signin">
+              <Button flat auto style={{ width: '100%', justifyContent: 'flex-start' }}>
+                Sign In
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
 
-      <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      {/* Main Content */}
+      <div style={{ flexGrow: 1, marginLeft: '250px', overflowY: 'auto' }}>
+        {/* Header with Welcome Message */}
         <div
           style={{
-            backgroundImage: 'url(/images/background.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            height: '50vh',
+            position: 'fixed',
+            top: 0,
+            left: '250px',
+            right: 0,
+            height: '60px',
+            backgroundColor: '#fff',
+            borderBottom: '1px solid #ddd',
             display: 'flex',
-            justifyContent: 'center',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            color: '#fff',
+            padding: '0 20px',
+            zIndex: 1000,
           }}
         >
+          <h1 style={{ margin: 0, fontSize: '1.5rem' }}>MelodyVerse</h1>
+          <div style={{ color: '#111' }}>
+            {user ? `Welcome, ${user.username}` : ''}
+          </div>
         </div>
 
-        <div style={{ flexGrow: 1, padding: '2rem', position: 'relative' }}>
-          {/* Username display */}
-          <div style={{ position: 'absolute', top: '20px', right: '20px', color: '#111' }}>
-            {username ? `Welcome, ${username}` : 'Welcome'}
+        <div style={{ paddingTop: '60px' }}>
+          {/* Top Half Background Image */}
+          <div
+            style={{
+              backgroundImage: 'url(/images/background.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              height: '50vh',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              color: '#fff',
+            }}
+          >
+            <h1 style={{ fontSize: '3rem', textShadow: '2px 2px 8px rgba(0, 0, 0, 0.7)' }}>
+              Explore Music Genres
+            </h1>
           </div>
 
-          {/* Main content */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '-100px' }}>
-            {genres.map((genre, index) => (
-              <GenreCard key={index} genre={genre.name} image={genre.image} />
-            ))}
+          {/* Genre Cards */}
+          <div style={{ padding: '2rem', marginTop: '-60px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+              {genres.map((genre, index) => (
+                <GenreCard key={index} genre={genre.name} image={genre.image} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
