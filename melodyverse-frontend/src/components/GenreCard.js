@@ -1,4 +1,5 @@
-import React from 'react';
+import React from "react";
+import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 import { motion } from 'framer-motion';
 
 const GenreCard = ({ genre, image }) => {
@@ -6,38 +7,23 @@ const GenreCard = ({ genre, image }) => {
     <motion.div
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      style={{
-        backgroundColor: '#f0f0f0',
-        borderRadius: '20px',
-        padding: '20px',
-        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: '1.5rem',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-        height: '300px',
-      }}
+      style={{ width: '100%', maxWidth: '300px' }} // Adjust the width of the card
     >
-      <img
-        src={image}
-        alt={`${genre}`}
-        style={{
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          opacity: '0.3',
-          zIndex: '0',
-        }}
-      />
-      <span style={{ zIndex: '1' }}>{genre}</span>
+      <Card className="py-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.7)', color: '#fff' }}>
+        <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+          <p className="text-tiny uppercase font-bold">{genre}</p>
+          <h4 className="font-bold text-large">{genre} Mix</h4>
+        </CardHeader>
+        <CardBody className="overflow-visible py-2">
+          <Image
+            alt={`${genre} background`}
+            className="object-cover rounded-xl"
+            src={image}
+            width={270}
+            style={{ opacity: '0.7' }} // Apply opacity to the image
+          />
+        </CardBody>
+      </Card>
     </motion.div>
   );
 };
